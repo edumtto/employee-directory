@@ -1,10 +1,3 @@
-//
-//  EmployeesBuilder.swift
-//  EmployeeDirectory
-//
-//  Created by Eduardo Motta de Oliveira on 1/18/23.
-//
-
 import Foundation
 import UIKit
 
@@ -14,6 +7,9 @@ enum EmployeesBuilder {
         let service = EmployeesService()
         let interactor = EmployeesInteractor(presenter: presenter, service: service)
         let viewController = EmployeesViewController(interactor: interactor)
+        
+        presenter.view = viewController
+        
         return viewController
     }
 }

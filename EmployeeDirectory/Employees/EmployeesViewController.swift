@@ -9,7 +9,10 @@ import Foundation
 import UIKit
 
 protocol EmployeesDisplay: AnyObject {
-    
+    func startLoading()
+    func stopLoading()
+    func displayEmployees()
+    func displayError()
 }
 
 final class EmployeesViewController: UIViewController {
@@ -24,9 +27,25 @@ final class EmployeesViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .yellow
+        interactor.loadEmployees()
     }
 }
 
 extension EmployeesViewController: EmployeesDisplay {
+    func startLoading() {
+        
+    }
     
+    func stopLoading() {
+        
+    }
+    
+    func displayEmployees() {
+        
+    }
+    
+    func displayError() {
+        
+    }
 }

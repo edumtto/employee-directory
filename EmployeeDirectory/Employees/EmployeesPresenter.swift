@@ -1,14 +1,10 @@
-//
-//  EmployeePresenter.swift
-//  EmployeeDirectory
-//
-//  Created by Eduardo Motta de Oliveira on 1/18/23.
-//
-
 import Foundation
 
 protocol EmployeesPresenting {
-    
+    func presentLoading()
+    func hideLoading()
+    func presentEmployees(_ employees: [Employee])
+    func presentError()
 }
 
 final class EmployeePresenter {
@@ -16,5 +12,19 @@ final class EmployeePresenter {
 }
 
 extension EmployeePresenter: EmployeesPresenting {
+    func presentLoading() {
+        view?.startLoading()
+    }
     
+    func hideLoading() {
+        view?.stopLoading()
+    }
+    
+    func presentError() {
+        view?.displayError()
+    }
+    
+    func presentEmployees(_ employees: [Employee]) {
+        print(employees.count)
+    }
 }

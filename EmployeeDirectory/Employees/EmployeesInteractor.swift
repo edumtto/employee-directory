@@ -8,7 +8,7 @@
 import Foundation
 
 protocol EmployeesInteracting {
-    
+    func loadEmployees()
 }
 
 final class EmployeesInteractor {
@@ -22,5 +22,15 @@ final class EmployeesInteractor {
 }
 
 extension EmployeesInteractor: EmployeesInteracting {
-    
+    func loadEmployees() {
+        service.fetchEmployees { [weak self] result in
+            switch result {
+            case .success(let response):
+                let employees = response.employees
+                self?.presenter.presentEmployees(employees)
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
 }
