@@ -1,4 +1,5 @@
 import Foundation
+import SDWebImage
 import UIKit
 
 final class EmployeeSummaryCell: UITableViewCell {
@@ -6,8 +7,8 @@ final class EmployeeSummaryCell: UITableViewCell {
     
     private let photoView: UIImageView = {
         let imageView = UIImageView(image: #imageLiteral(resourceName: "placeholder.png"))
-        imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
@@ -38,7 +39,7 @@ final class EmployeeSummaryCell: UITableViewCell {
     private let contentStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.spacing = 0
+        stackView.spacing = 8
         return stackView
     }()
     
@@ -46,6 +47,11 @@ final class EmployeeSummaryCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         buildHierarchy()
         setUpConstraints()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        photoView.sd_cancelCurrentImageLoad()
     }
     
     required init?(coder: NSCoder) {
@@ -64,7 +70,7 @@ final class EmployeeSummaryCell: UITableViewCell {
     
     private func setUpConstraints() {
         NSLayoutConstraint.activate([
-            contentStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
+            contentStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             contentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
             contentStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             contentStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
@@ -74,8 +80,10 @@ final class EmployeeSummaryCell: UITableViewCell {
     }
     
     func configure(_ employeeSummary: EmployeeSummary) {
-        // sdwebimage
-        //photoView.image =
+        photoView.sd_setImage(
+            with: employeeSummary.photoURL,
+            placeholderImage: #imageLiteral(resourceName: "placeholder.png")
+        )
         nameLabel.text = employeeSummary.name
         teamLabel.text = employeeSummary.team
     }
