@@ -25,6 +25,13 @@ extension EmployeePresenter: EmployeesPresenting {
     }
     
     func presentEmployees(_ employees: [Employee]) {
-        print(employees.count)
+        let summaries = employees.map { employee in
+            EmployeeSummary(
+                photoURL: URL(string: employee.photoUrlSmall),
+                name: employee.fullName,
+                team: employee.team
+            )
+        }
+        view?.displayEmployeeSummaries(summaries)
     }
 }

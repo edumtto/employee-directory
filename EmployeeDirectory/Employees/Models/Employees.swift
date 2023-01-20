@@ -5,7 +5,7 @@ struct Employees: Decodable {
 }
 
 struct Employee: Decodable {
-    enum `Type`: String, Decodable {
+    enum EmploymentType: String, Decodable {
         case fullTime = "FULL_TIME"
         case partTime = "PART_TIME"
         case contractor = "CONTRACTOR"
@@ -19,5 +19,5 @@ struct Employee: Decodable {
     let photoUrlSmall: String
     let photoUrlLarge: String
     let team: String
-    let employeeType: `Type`
+    let employeeType: EmploymentType
 }

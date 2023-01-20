@@ -2,8 +2,10 @@ import Foundation
 import UIKit
 
 final class EmployeeSummaryCell: UITableViewCell {
+    static let identifier = String(describing: EmployeeSummaryCell.self)
+    
     private let photoView: UIImageView = {
-        let imageView = UIImageView()
+        let imageView = UIImageView(image: #imageLiteral(resourceName: "placeholder.png"))
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -13,6 +15,7 @@ final class EmployeeSummaryCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .boldSystemFont(ofSize: 20)
+        label.setContentHuggingPriority(.defaultHigh, for: .vertical)
         return label
     }()
     
@@ -20,11 +23,13 @@ final class EmployeeSummaryCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 14)
+        label.setContentHuggingPriority(.defaultHigh, for: .vertical)
         return label
     }()
     
     private let nameTeamStackView: UIStackView = {
         let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.spacing = 8
         stackView.axis = .vertical
         return stackView
@@ -33,7 +38,7 @@ final class EmployeeSummaryCell: UITableViewCell {
     private let contentStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.spacing = 8
+        stackView.spacing = 0
         return stackView
     }()
     
@@ -48,24 +53,23 @@ final class EmployeeSummaryCell: UITableViewCell {
     }
     
     private func buildHierarchy() {
+        contentView.addSubview(contentStackView)
+        
         nameTeamStackView.addArrangedSubview(nameLabel)
         nameTeamStackView.addArrangedSubview(teamLabel)
         
         contentStackView.addArrangedSubview(photoView)
         contentStackView.addArrangedSubview(nameTeamStackView)
-        
-        contentView.addSubview(contentStackView)
     }
     
     private func setUpConstraints() {
         NSLayoutConstraint.activate([
-            contentView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            contentView.topAnchor.constraint(equalTo: topAnchor),
-            contentView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            contentStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
+            contentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
+            contentStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            contentStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
             
-            photoView.widthAnchor.constraint(equalToConstant: 58),
-            photoView.heightAnchor.constraint(equalToConstant: 58)
+            photoView.widthAnchor.constraint(equalToConstant: 58)
         ])
     }
     
