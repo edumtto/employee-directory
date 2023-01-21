@@ -1,28 +1,19 @@
 import Foundation
 
-public enum NetworkError: Error {
-    case decodeError(Error)
-    case undefinedError(Error)
-    case requestError(URLResponse?)
+enum NetworkError: Error {
+    case decode
+    case undefined(Error)
+    case noData(URLResponse?)
 }
 
-//public protocol NetworkManaging {
-//    associatedtype ResultType: Decodable
-//    func run(
-//        _ request: URLRequest,
-//        keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy,
-//        completion: @escaping ((Result<ResultType, Error>) -> Void)
-//    )
-//}
-
-public struct NetworkManager<ResultType: Decodable> {
-    public let session: URLSession
+struct NetworkManager<ResultType: Decodable> {
+    let session: URLSession
     
-    public init(session: URLSession = URLSession.shared) {
+    init(session: URLSession = URLSession.shared) {
         self.session = session
     }
     
-    public func run(
+    func run(
         _ request: URLRequest,
         keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy = .useDefaultKeys,
         completion: @escaping ((Result<ResultType, NetworkError>) -> Void)
@@ -30,7 +21,7 @@ public struct NetworkManager<ResultType: Decodable> {
         
         let dataTask = session.dataTask(with: request) { data, response, error in
             if let error = error {
-                completion(Result.failure(NetworkError.undefinedError(error)))
+                completion(Result.failure(NetworkError.undefined(error)))
                 return
             }
             
@@ -39,7 +30,7 @@ public struct NetworkManager<ResultType: Decodable> {
                 return
             }
             
-            completion(.failure(NetworkError.requestError(response)))
+            completion(.failure(NetworkError.noData(response)))
         }
         dataTask.resume()
     }
@@ -58,7 +49,7 @@ public struct NetworkManager<ResultType: Decodable> {
         } catch {
             // logger.log(error)
             debugPrint(error)
-            return Result.failure(NetworkError.decodeError(error))
+            return Result.failure(NetworkError.decode)
         }
     }
 }

@@ -1,8 +1,8 @@
 import Foundation
 
 protocol EmployeesPresenting {
-    func presentLoading()
-    func hideLoading()
+    func presentLoadingIndicator(isRefreshing: Bool)
+    func hideLoadingIndicator(isRefreshing: Bool)
     func presentEmployees(_ employees: [Employee])
     func presentError()
 }
@@ -12,19 +12,25 @@ final class EmployeePresenter {
 }
 
 extension EmployeePresenter: EmployeesPresenting {
-    func presentLoading() {
-        view?.startLoading()
+    func presentLoadingIndicator(isRefreshing: Bool) {
+        guard !isRefreshing else { return }
+        view?.startLoadingAnimation()
     }
     
-    func hideLoading() {
-        view?.stopLoading()
+    func hideLoadingIndicator(isRefreshing: Bool) {
+        isRefreshing ? view?.stopRefreshingAnimation() : view?.stopLoadingAnimation()
     }
     
     func presentError() {
-        view?.displayError()
+        view?.displayError(message: "Error!\nPlease, try again later.")
     }
     
     func presentEmployees(_ employees: [Employee]) {
+        if employees.isEmpty {
+            view?.displayEmptyState()
+            return
+        }
+        
         let summaries = employees.map { employee in
             EmployeeSummary(
                 photoURL: URL(string: employee.photoUrlSmall),
@@ -32,6 +38,7 @@ extension EmployeePresenter: EmployeesPresenting {
                 team: employee.team
             )
         }
+        
         view?.displayEmployeeSummaries(summaries)
     }
 }

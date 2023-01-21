@@ -2,15 +2,21 @@ import Foundation
 import UIKit
 
 protocol EmployeesDisplay: AnyObject {
-    func startLoading()
-    func stopLoading()
+    func startLoadingAnimation()
+    func stopLoadingAnimation()
+    func stopRefreshingAnimation()
     func displayEmployeeSummaries(_ summaries: [EmployeeSummary])
-    func displayError()
+    func displayEmptyState()
+    func displayError(message: String)
 }
 
 final class EmployeesViewController: UIViewController {
     private let interactor: EmployeesInteracting
     private var employeeSummaries = [EmployeeSummary]()
+    
+    private var loadingIndicator: UIActivityIndicatorView?
+    private var emptyStateView: EmployeesEmptyStateView?
+    private var errorView: EmployeesErrorView?
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -19,7 +25,11 @@ final class EmployeesViewController: UIViewController {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 100
         tableView.dataSource = self
-        tableView.backgroundColor = .gray
+        
+        let refreshControll = UIRefreshControl()
+        refreshControll.addTarget(self, action: #selector(refreshTableView), for: .valueChanged)
+        tableView.refreshControl = refreshControll
+        
         return tableView
     }()
     
@@ -32,10 +42,12 @@ final class EmployeesViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        title = "Employees"
         buildViewHierarchy()
         setUpConstraints()
         
-        interactor.loadEmployees()
+        interactor.loadEmployees(isRefreshing: false)
     }
     
     private func buildViewHierarchy() {
@@ -49,6 +61,18 @@ final class EmployeesViewController: UIViewController {
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+    
+    @objc private func refreshTableView() {
+        interactor.loadEmployees(isRefreshing: true)
+    }
+    
+    private func removeExceptionStateViews() {
+        errorView?.removeFromSuperview()
+        errorView = nil
+        
+        emptyStateView?.removeFromSuperview()
+        emptyStateView = nil
     }
 }
 
@@ -69,31 +93,47 @@ extension EmployeesViewController: UITableViewDataSource {
 }
 
 extension EmployeesViewController: EmployeesDisplay {
-    func startLoading() {
+    func startLoadingAnimation() {
+        let loadingIndicator = UIActivityIndicatorView(style: .large)
+        tableView.backgroundView = loadingIndicator
+        loadingIndicator.startAnimating()
         
+        self.loadingIndicator = loadingIndicator
     }
     
-    func stopLoading() {
-        
+    func stopLoadingAnimation() {
+        loadingIndicator?.stopAnimating()
+        loadingIndicator?.removeFromSuperview()
+        loadingIndicator = nil
+    }
+    
+    func stopRefreshingAnimation() {
+        tableView.refreshControl?.endRefreshing()
     }
     
     func displayEmployeeSummaries(_ summaries: [EmployeeSummary]) {
+        removeExceptionStateViews()
+        
         employeeSummaries = summaries
         tableView.reloadData()
     }
     
-    func displayError() {
+    func displayEmptyState() {
+        let emptyStateView = EmployeesEmptyStateView()
         
+        view.addSubview(emptyStateView)
+        emptyStateView.contrainAllEdgesToSuperview()
+        
+        self.emptyStateView = emptyStateView
+    }
+    
+    func displayError(message: String) {
+        let errorView = EmployeesErrorView()
+        errorView.configure(message: message)
+        
+        view.addSubview(errorView)
+        errorView.contrainAllEdgesToSuperview()
+        
+        self.errorView = errorView
     }
 }
-
-//final class TableViewDataSource<T: UITableViewCell>: NSObject, UITableViewDataSource {
-//    var data = [T]()
-//
-//
-
-//
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        <#code#>
-//    }
-//}
