@@ -1,17 +1,18 @@
 import Foundation
 
 protocol EmployeesPresenting {
+    var view: EmployeesDisplay? { get set }
     func presentLoadingIndicator(isRefreshing: Bool)
     func hideLoadingIndicator(isRefreshing: Bool)
     func presentEmployees(_ employees: [Employee])
     func presentError()
 }
 
-final class EmployeePresenter {
+final class EmployeesPresenter {
     weak var view: EmployeesDisplay?
 }
 
-extension EmployeePresenter: EmployeesPresenting {
+extension EmployeesPresenter: EmployeesPresenting {
     func presentLoadingIndicator(isRefreshing: Bool) {
         guard !isRefreshing else { return }
         view?.startLoadingAnimation()
@@ -33,12 +34,18 @@ extension EmployeePresenter: EmployeesPresenting {
         
         let summaries = employees.map { employee in
             EmployeeSummary(
-                photoURL: URL(string: employee.photoUrlSmall),
+                photoURL: employee.photoUrlSmall?.url,
                 name: employee.fullName,
                 team: employee.team
             )
         }
         
         view?.displayEmployeeSummaries(summaries)
+    }    
+}
+
+private extension String {
+    var url: URL? {
+        URL(string: self)
     }
 }

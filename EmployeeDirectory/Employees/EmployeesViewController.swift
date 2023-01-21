@@ -55,12 +55,7 @@ final class EmployeesViewController: UIViewController {
     }
     
     private func setUpConstraints() {
-        NSLayoutConstraint.activate([
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+        tableView.contrainAllEdgesToSuperview()
     }
     
     @objc private func refreshTableView() {
@@ -121,7 +116,8 @@ extension EmployeesViewController: EmployeesDisplay {
     func displayEmptyState() {
         let emptyStateView = EmployeesEmptyStateView()
         
-        view.addSubview(emptyStateView)
+//        view.addSubview(emptyStateView)
+        tableView.backgroundView = emptyStateView
         emptyStateView.contrainAllEdgesToSuperview()
         
         self.emptyStateView = emptyStateView
