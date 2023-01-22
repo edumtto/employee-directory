@@ -75,7 +75,7 @@ final class EmployeePresenterTests: XCTestCase {
     }
     
     func testPresentError_shouldDisplayErrorMessage() {
-        let expectedMessage = "Error!\nPlease, try again later."
+        let expectedMessage = "Please, check your connection and try again later."
         sut.presentError()
         
         XCTAssertEqual(view.displayErrorCalls, [expectedMessage])

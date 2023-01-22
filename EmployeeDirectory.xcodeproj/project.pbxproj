@@ -11,9 +11,7 @@
 		34803E6D297A262400CD6866 /* EmployeeSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34803E6C297A262400CD6866 /* EmployeeSummaryCell.swift */; };
 		34803E6F297A295C00CD6866 /* EmployeeSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34803E6E297A295C00CD6866 /* EmployeeSummary.swift */; };
 		34803E72297A384D00CD6866 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 34803E71297A384D00CD6866 /* SDWebImage */; };
-		34B9FFEF297B60570017F0C8 /* EmployeesErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B9FFEE297B60570017F0C8 /* EmployeesErrorView.swift */; };
 		34B9FFF1297B60880017F0C8 /* EmployeesEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B9FFF0297B60880017F0C8 /* EmployeesEmptyStateView.swift */; };
-		34B9FFF3297B6A960017F0C8 /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B9FFF2297B6A960017F0C8 /* UIView+Extensions.swift */; };
 		34B9FFF6297B73030017F0C8 /* EmployeesInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B9FFF5297B73030017F0C8 /* EmployeesInteractorTests.swift */; };
 		34B9FFF8297B73100017F0C8 /* EmployeesPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B9FFF7297B73100017F0C8 /* EmployeesPresenterTests.swift */; };
 		34B9FFFB297B7D480017F0C8 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 34B9FFFA297B7D480017F0C8 /* SDWebImage */; };
@@ -54,9 +52,7 @@
 		34803E6A297A0FF300CD6866 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		34803E6C297A262400CD6866 /* EmployeeSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmployeeSummaryCell.swift; sourceTree = "<group>"; };
 		34803E6E297A295C00CD6866 /* EmployeeSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmployeeSummary.swift; sourceTree = "<group>"; };
-		34B9FFEE297B60570017F0C8 /* EmployeesErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmployeesErrorView.swift; sourceTree = "<group>"; };
 		34B9FFF0297B60880017F0C8 /* EmployeesEmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmployeesEmptyStateView.swift; sourceTree = "<group>"; };
-		34B9FFF2297B6A960017F0C8 /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 		34B9FFF5297B73030017F0C8 /* EmployeesInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmployeesInteractorTests.swift; sourceTree = "<group>"; };
 		34B9FFF7297B73100017F0C8 /* EmployeesPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmployeesPresenterTests.swift; sourceTree = "<group>"; };
 		34B9FFFC297B93590017F0C8 /* EmployeesMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmployeesMocks.swift; sourceTree = "<group>"; };
@@ -110,7 +106,6 @@
 			isa = PBXGroup;
 			children = (
 				34803E6A297A0FF300CD6866 /* NetworkManager.swift */,
-				34B9FFF2297B6A960017F0C8 /* UIView+Extensions.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -136,7 +131,6 @@
 			isa = PBXGroup;
 			children = (
 				34803E6C297A262400CD6866 /* EmployeeSummaryCell.swift */,
-				34B9FFEE297B60570017F0C8 /* EmployeesErrorView.swift */,
 				34B9FFF0297B60880017F0C8 /* EmployeesEmptyStateView.swift */,
 			);
 			path = Views;
@@ -357,12 +351,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				34B9FFEF297B60570017F0C8 /* EmployeesErrorView.swift in Sources */,
 				34803E6B297A0FF300CD6866 /* NetworkManager.swift in Sources */,
 				34F1F1762978AB7B00883B1D /* EmployeesPresenter.swift in Sources */,
 				34F1F1412978AA7400883B1D /* AppDelegate.swift in Sources */,
 				34803E6F297A295C00CD6866 /* EmployeeSummary.swift in Sources */,
-				34B9FFF3297B6A960017F0C8 /* UIView+Extensions.swift in Sources */,
 				34F1F1722978AAC500883B1D /* EmployeesViewController.swift in Sources */,
 				34D8C7EC297A02690034C539 /* Employees.swift in Sources */,
 				34F1F1432978AA7400883B1D /* SceneDelegate.swift in Sources */,

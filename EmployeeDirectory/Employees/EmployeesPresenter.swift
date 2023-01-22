@@ -23,15 +23,10 @@ extension EmployeesPresenter: EmployeesPresenting {
     }
     
     func presentError() {
-        view?.displayError(message: "Error!\nPlease, try again later.")
+        view?.displayError(message: "Please, check your connection and try again later.")
     }
     
     func presentEmployees(_ employees: [Employee]) {
-        if employees.isEmpty {
-            view?.displayEmptyState()
-            return
-        }
-        
         let summaries = employees.map { employee in
             EmployeeSummary(
                 photoURL: employee.photoUrlSmall?.url,
@@ -41,6 +36,10 @@ extension EmployeesPresenter: EmployeesPresenting {
         }
         
         view?.displayEmployeeSummaries(summaries)
+        
+        if employees.isEmpty {
+            view?.displayEmptyState()
+        }
     }    
 }
 

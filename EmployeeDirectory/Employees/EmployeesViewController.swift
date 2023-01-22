@@ -16,7 +16,6 @@ final class EmployeesViewController: UIViewController {
     
     private var loadingIndicator: UIActivityIndicatorView?
     private var emptyStateView: EmployeesEmptyStateView?
-    private var errorView: EmployeesErrorView?
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -55,18 +54,26 @@ final class EmployeesViewController: UIViewController {
     }
     
     private func setUpConstraints() {
-        tableView.contrainAllEdgesToSuperview()
+        NSLayoutConstraint.activate([
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
     
     @objc private func refreshTableView() {
         interactor.loadEmployees(isRefreshing: true)
     }
     
-    private func removeExceptionStateViews() {
-        errorView?.removeFromSuperview()
-        errorView = nil
-        
-        emptyStateView?.removeFromSuperview()
+    private func addExceptionStateView(_ exceptionView: UIView) {
+        let size = CGSize(width: view.frame.width, height: view.frame.height / 1.5)
+        exceptionView.frame = CGRect(origin: .zero, size: size)
+        tableView.tableHeaderView = exceptionView
+    }
+    
+    private func removeEmptyStateView() {
+        tableView.tableHeaderView = nil
         emptyStateView = nil
     }
 }
@@ -98,7 +105,7 @@ extension EmployeesViewController: EmployeesDisplay {
     
     func stopLoadingAnimation() {
         loadingIndicator?.stopAnimating()
-        loadingIndicator?.removeFromSuperview()
+        tableView.backgroundView = nil
         loadingIndicator = nil
     }
     
@@ -107,7 +114,7 @@ extension EmployeesViewController: EmployeesDisplay {
     }
     
     func displayEmployeeSummaries(_ summaries: [EmployeeSummary]) {
-        removeExceptionStateViews()
+        removeEmptyStateView()
         
         employeeSummaries = summaries
         tableView.reloadData()
@@ -116,20 +123,17 @@ extension EmployeesViewController: EmployeesDisplay {
     func displayEmptyState() {
         let emptyStateView = EmployeesEmptyStateView()
         
-//        view.addSubview(emptyStateView)
-        tableView.backgroundView = emptyStateView
-        emptyStateView.contrainAllEdgesToSuperview()
+        let size = CGSize(width: view.frame.width, height: view.frame.height / 1.5)
+        emptyStateView.frame = CGRect(origin: .zero, size: size)
+        tableView.tableHeaderView = emptyStateView
         
         self.emptyStateView = emptyStateView
     }
     
     func displayError(message: String) {
-        let errorView = EmployeesErrorView()
-        errorView.configure(message: message)
-        
-        view.addSubview(errorView)
-        errorView.contrainAllEdgesToSuperview()
-        
-        self.errorView = errorView
+        let defaultAction = UIAlertAction(title: "Ok", style: .default)
+        let alertController = UIAlertController(title: "Error 🫤", message: message, preferredStyle: .alert)
+        alertController.addAction(defaultAction)
+        present(alertController, animated: true)
     }
 }
