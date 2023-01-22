@@ -89,7 +89,7 @@ final class EmployeeInteractorTests: XCTestCase {
     }
     
     func testLoadEmpoyees_whenResponseReturnsFailure_shouldLoadAndPresentError() {
-        service.result = .failure(.decode)
+        service.result = .failure(.badRequest)
         
         sut.loadEmployees(isRefreshing: false)
         

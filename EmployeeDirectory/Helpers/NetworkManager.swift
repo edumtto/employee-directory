@@ -1,9 +1,11 @@
 import Foundation
 
 enum NetworkError: Error {
-    case decode
+    case decodeError
+    case noContent(URLResponse?)
+    case badRequest
+    case serverError
     case undefined(Error)
-    case noData(URLResponse?)
 }
 
 protocol NetworkManaging {
@@ -29,8 +31,8 @@ struct NetworkManager: NetworkManaging {
         
         let dataTask = session.dataTask(with: request) { data, response, error in
             if let error = error {
-                // TODO: Categorize different errors
-                completion(.failure(NetworkError.undefined(error)))
+                let networkError = mapToNetworkError(response: response, error: error)
+                completion(.failure(networkError))
                 return
             }
             
@@ -39,12 +41,12 @@ struct NetworkManager: NetworkManaging {
                     let decodedData: ResultType = try decodeData(data, keyDecodingStrategy: keyDecodingStrategy)
                     completion(.success(decodedData))
                 } catch {
-                    completion(.failure(.decode))
+                    completion(.failure(.decodeError))
                 }
                 return
             }
             
-            completion(.failure(.noData(response)))
+            completion(.failure(.noContent(response)))
         }
         dataTask.resume()
     }
@@ -56,5 +58,20 @@ struct NetworkManager: NetworkManaging {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = keyDecodingStrategy
         return try decoder.decode(ResultType.self, from: data)
+    }
+    
+    private func mapToNetworkError(response: URLResponse?, error: Error) -> NetworkError {
+        guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
+            return .undefined(error)
+        }
+
+        switch statusCode {
+        case 400..<500:
+            return .badRequest
+        case 500..<600:
+            return .serverError
+        default:
+            return .undefined(error)
+        }
     }
 }
