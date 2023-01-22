@@ -134,6 +134,10 @@ extension EmployeesViewController: EmployeesDisplay {
         let defaultAction = UIAlertAction(title: "Ok", style: .default)
         let alertController = UIAlertController(title: "Error 🫤", message: message, preferredStyle: .alert)
         alertController.addAction(defaultAction)
-        present(alertController, animated: true)
+        
+        // Deadline added to avoid conflicting with refresh control animation
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.present(alertController, animated: true)
+        }
     }
 }

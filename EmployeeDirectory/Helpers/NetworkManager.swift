@@ -6,50 +6,55 @@ enum NetworkError: Error {
     case noData(URLResponse?)
 }
 
-struct NetworkManager<ResultType: Decodable> {
+protocol NetworkManaging {
+    func perform<ResultType: Decodable>(
+        _ request: URLRequest,
+        keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy,
+        completion: @escaping ((Result<ResultType, NetworkError>) -> Void)
+    )
+}
+
+struct NetworkManager: NetworkManaging {
     let session: URLSession
     
     init(session: URLSession = URLSession.shared) {
         self.session = session
     }
     
-    func run(
+    func perform<ResultType: Decodable>(
         _ request: URLRequest,
-        keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy = .useDefaultKeys,
+        keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy,
         completion: @escaping ((Result<ResultType, NetworkError>) -> Void)
     ) {
         
         let dataTask = session.dataTask(with: request) { data, response, error in
             if let error = error {
-                completion(Result.failure(NetworkError.undefined(error)))
+                // TODO: Categorize different errors
+                completion(.failure(NetworkError.undefined(error)))
                 return
             }
             
             if let data = data {
-                completion(decodeData(data, keyDecodingStrategy: keyDecodingStrategy))
+                do {
+                    let decodedData: ResultType = try decodeData(data, keyDecodingStrategy: keyDecodingStrategy)
+                    completion(.success(decodedData))
+                } catch {
+                    completion(.failure(.decode))
+                }
                 return
             }
             
-            completion(.failure(NetworkError.noData(response)))
+            completion(.failure(.noData(response)))
         }
         dataTask.resume()
     }
     
-    private func decodeData(
+    private func decodeData<ResultType: Decodable>(
         _ data: Data,
         keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy
-    ) -> Result<ResultType, NetworkError> {
-        
+    ) throws -> ResultType {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = keyDecodingStrategy
-        
-        do {
-            let decodedResult = try decoder.decode(ResultType.self, from: data)
-            return Result.success(decodedResult)
-        } catch {
-            // logger.log(error)
-            debugPrint(error)
-            return Result.failure(NetworkError.decode)
-        }
+        return try decoder.decode(ResultType.self, from: data)
     }
 }
