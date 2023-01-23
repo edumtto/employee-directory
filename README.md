@@ -18,9 +18,10 @@
     - 7 to 8 hours. I wanted to spend less, but I was enjoying making some tweaks and learning a little more in the process.
 
 ## Did you make any trade-offs for this project? What would you have done differently with more time?
+    - Test network layers; 
     - Better visual feedback for errors (more descriptive, better communication);
     - Improve constraints and layout of the table view cell;
-    - Storing strings in a string file;
+    - Store strings in a string file;
     - Event tracking for monitoring and accessibility adjustments may be necessary for a practical project.
     
 
