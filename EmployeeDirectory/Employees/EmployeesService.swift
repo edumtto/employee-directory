@@ -11,7 +11,7 @@ final class EmployeesService {
     
     private let networkManager: NetworkManaging
     
-    init(networkManager: NetworkManaging = NetworkManager()) {
+    init(networkManager: NetworkManaging) {
         self.networkManager = networkManager
     }
 }
