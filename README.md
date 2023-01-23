@@ -2,13 +2,12 @@
     - Xcode 14.2
 
 ## Steps to run the app
-    1. Clone the repository: "git@github.com:edumtto/employee-directory.git";
-    2. Open EmployeeDirectory.xcodeproj;
-    3. Build and execute.
+    1. Open EmployeeDirectory.xcodeproj;
+    2. Build and execute.
 
 ## What areas of the app did you focus on?
     - Network layer;
-    - VIP architecture.
+    - VIP architecture and data flow.
 
 ## What was the reason for your focus? What problems were you trying to solve?
     - Network layer: to create a reusable component to make api calls;
@@ -33,3 +32,4 @@
     - Placeholder image from "https://www.flaticon.com/free-icon/user_456283"
 
 ## Is there any other information you’d like us to know?
+    - Developed with iPhone focus.
